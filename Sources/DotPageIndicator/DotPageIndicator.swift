@@ -72,7 +72,7 @@ public struct DotPageIndicator: View {
     
     private func getDotPosition(for index: Int) -> CGFloat {
         let offset = CGFloat(currentIndex - index) * style.dotSpacing
-        return offset
+        return style.scrollDirection == .natural ? offset : -offset
     }
 }
 
@@ -82,49 +82,134 @@ public struct DotPageIndicator: View {
         let totalItems = 10
         
         var body: some View {
-            VStack {
-                // Vertical indicator
-                HStack {
-                    DotPageIndicator(
-                        currentIndex: $currentIndex,
-                        totalItems: totalItems,
-                        style: .init(orientation: .vertical)
-                    )
-                    .frame(width: 50)
-                    
-                    Spacer()
-                    
-                    VStack {
-                        Button("Previous") {
-                            if currentIndex > 0 {
-                                currentIndex -= 1
-                            }
-                        }
-                        
-                        Text("Page \(currentIndex + 1) of \(totalItems)")
-                        
-                        Button("Next") {
-                            if currentIndex < totalItems - 1 {
-                                currentIndex += 1
-                            }
+            ZStack {
+                // Beautiful animated gradient background
+                LinearGradient(
+                    colors: [.blue, .purple, .pink],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+                .opacity(0.3)
+                .ignoresSafeArea()
+                
+                // Add some floating circles for visual interest
+                GeometryReader { geometry in
+                    ZStack {
+                        ForEach(0..<5) { index in
+                            Circle()
+                                .fill(
+                                    LinearGradient(
+                                        colors: [.blue.opacity(0.2), .purple.opacity(0.2)],
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    )
+                                )
+                                .frame(width: CGFloat.random(in: 100...200))
+                                .position(
+                                    x: CGFloat.random(in: 0...geometry.size.width),
+                                    y: CGFloat.random(in: 0...geometry.size.height)
+                                )
+                                .blur(radius: 20)
                         }
                     }
-                    .padding()
                 }
-                
-                Spacer()
-                
-                // Horizontal indicator
-                VStack {
-                    DotPageIndicator(
-                        currentIndex: $currentIndex,
-                        totalItems: totalItems,
-                        style: .init(orientation: .horizontal)
-                    )
-                    .frame(height: 50)
+
+                VStack(spacing: 40) {
+                    Text("Vertical Indicators")
+                        .font(.headline)
+                    
+                    HStack(spacing: 40) {
+                        // Natural vertical (top to bottom)
+                        VStack {
+                            Text("Natural")
+                                .font(.caption)
+                            DotPageIndicator(
+                                currentIndex: $currentIndex,
+                                totalItems: totalItems,
+                                style: .init(
+                                    orientation: .vertical,
+                                    scrollDirection: .natural
+                                )
+                            )
+                            .frame(width: 50)
+                        }
+                        
+                        // Reversed vertical (bottom to top)
+                        VStack {
+                            Text("Reversed")
+                                .font(.caption)
+                            DotPageIndicator(
+                                currentIndex: $currentIndex,
+                                totalItems: totalItems,
+                                style: .init(
+                                    orientation: .vertical,
+                                    scrollDirection: .reversed
+                                )
+                            )
+                            .frame(width: 50)
+                        }
+                        
+                        VStack {
+                            Button("Previous") {
+                                if currentIndex > 0 {
+                                    currentIndex -= 1
+                                }
+                            }
+                            .buttonStyle(.bordered)
+                            
+                            Text("Page \(currentIndex + 1) of \(totalItems)")
+                            
+                            Button("Next") {
+                                if currentIndex < totalItems - 1 {
+                                    currentIndex += 1
+                                }
+                            }
+                            .buttonStyle(.bordered)
+                        }
+                        .frame(width: 120)
+                        .padding()
+                    }
+                    
+                    Text("Horizontal Indicators")
+                        .font(.headline)
+                    
+                    VStack(spacing: 40) {
+                        // Natural horizontal (left to right)
+                        VStack {
+                            Text("Natural")
+                                .font(.caption)
+                            DotPageIndicator(
+                                currentIndex: $currentIndex,
+                                totalItems: totalItems,
+                                style: .init(
+                                    orientation: .horizontal,
+                                    scrollDirection: .natural
+                                )
+                            )
+                            .frame(height: 50)
+                        }
+                        
+                        // Reversed horizontal (right to left)
+                        VStack {
+                            Text("Reversed")
+                                .font(.caption)
+                            DotPageIndicator(
+                                currentIndex: $currentIndex,
+                                totalItems: totalItems,
+                                style: .init(
+                                    orientation: .horizontal,
+                                    scrollDirection: .reversed
+                                )
+                            )
+                            .frame(height: 50)
+                        }
+                    }
                 }
+                .padding()
+                .background(.ultraThinMaterial)
+                .cornerRadius(20)
+                .padding()
             }
-            .padding()
         }
     }
     

@@ -8,8 +8,17 @@ public struct DotPageIndicatorStyle {
         case horizontal
     }
     
+    /// Scroll direction of the dot page indicator
+    public enum ScrollDirection {
+        case natural   // top to bottom for vertical, left to right for horizontal
+        case reversed  // bottom to top for vertical, right to left for horizontal
+    }
+    
     /// The orientation of the indicator
     public let orientation: Orientation
+    
+    /// The scroll direction of the indicator
+    public let scrollDirection: ScrollDirection
     
     /// Spacing between dots
     public let dotSpacing: CGFloat
@@ -65,6 +74,7 @@ public struct DotPageIndicatorStyle {
     /// Creates a new style configuration
     public init(
         orientation: Orientation = .vertical,
+        scrollDirection: ScrollDirection = .natural,
         dotSpacing: CGFloat = 12,
         dotSize: CGFloat = 6,
         visibleDots: Int = 7,
@@ -84,6 +94,7 @@ public struct DotPageIndicatorStyle {
         animationDampingFraction: Double = 0.8
     ) {
         self.orientation = orientation
+        self.scrollDirection = scrollDirection
         self.dotSpacing = dotSpacing
         self.dotSize = dotSize
         self.visibleDots = visibleDots

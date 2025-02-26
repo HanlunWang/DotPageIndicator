@@ -1,14 +1,27 @@
 # DotPageIndicator
 
-A customizable dot-based page indicator for SwiftUI that supports both vertical and horizontal orientations. Perfect for indicating the current position within a collection of items, such as pages in a carousel or sections in a scrollable view.
+A modern, fully customizable dot-based page indicator for SwiftUI that goes beyond UIPageControl's limitations. Perfect for apps with scrollable content, carousels, or onboarding flows - especially when dealing with many pages. Unlike UIPageControl, DotPageIndicator provides smooth scrolling animations and maintains great usability even with large numbers of pages.
 
 ![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Swift](https://img.shields.io/badge/swift-5.5%2B-orange.svg)
 ![Platforms](https://img.shields.io/badge/platforms-iOS%2015.0+%20|%20macOS%2012.0+%20|%20tvOS%2014.0+%20|%20watchOS%207.0+-brightgreen.svg)
 
+## Preview
+
+![DotPageIndicator Preview](preview.gif)
+
+## Key Advantages
+
+- **Superior to UIPageControl**: Handles large page numbers gracefully with a scrolling interface
+- **Smooth Animations**: Beautiful scroll animations that UIPageControl lacks
+- **Highly Customizable**: Every aspect can be styled to match your app's design
+- **SwiftUI Native**: Built from ground up for SwiftUI with modern API design
+- **Easy to Implement**: Just a few lines of code to get started
+
 ## Features
 
 - Support for both vertical and horizontal orientations
+- Customizable scroll directions (natural and reversed)
 - Customizable dot appearance (size, spacing, colors)
 - Smooth animations with spring effects
 - Adaptive scaling and opacity for better visual feedback
@@ -45,20 +58,45 @@ dependencies: [
 @State private var currentPage = 0
 let totalPages = 5
 
-// Vertical indicator (default)
+// Vertical indicator (default - top to bottom)
 DotPageIndicator(
     currentIndex: $currentPage,
     totalItems: totalPages
 )
-.frame(width: 50)  // Adjust width for vertical orientation
+.frame(width: 50)
 
-// Horizontal indicator
+// Vertical indicator (bottom to top)
 DotPageIndicator(
     currentIndex: $currentPage,
     totalItems: totalPages,
-    style: .init(orientation: .horizontal)
+    style: .init(
+        orientation: .vertical,
+        scrollDirection: .reversed
+    )
 )
-.frame(height: 50)  // Adjust height for horizontal orientation
+.frame(width: 50)
+
+// Horizontal indicator (left to right)
+DotPageIndicator(
+    currentIndex: $currentPage,
+    totalItems: totalPages,
+    style: .init(
+        orientation: .horizontal,
+        scrollDirection: .natural
+    )
+)
+.frame(height: 50)
+
+// Horizontal indicator (right to left)
+DotPageIndicator(
+    currentIndex: $currentPage,
+    totalItems: totalPages,
+    style: .init(
+        orientation: .horizontal,
+        scrollDirection: .reversed
+    )
+)
+.frame(height: 50)
 ```
 
 ### Custom Styling
@@ -69,6 +107,7 @@ DotPageIndicator(
     totalItems: totalPages,
     style: DotPageIndicatorStyle(
         orientation: .horizontal,          // Choose orientation
+        scrollDirection: .natural,         // Choose scroll direction
         dotSpacing: 12,                   // Space between dots
         dotSize: 8,                       // Size of each dot
         visibleDots: 5,                   // Number of visible dots
