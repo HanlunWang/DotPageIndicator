@@ -34,13 +34,19 @@ A modern, fully customizable dot-based page indicator for SwiftUI that goes beyo
 
 ### Swift Package Manager
 
-Add the following to your `Package.swift` file:
+You can add DotPageIndicator to your project using Swift Package Manager by adding it as a dependency in your `Package.swift` file:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/yourusername/DotPageIndicator.git", from: "1.0.0")
+    .package(url: "https://github.com/HanlunWang/DotPageIndicator.git", from: "1.0.0")
 ]
 ```
+
+Or in Xcode:
+
+1. Go to File > Add Packages
+2. Enter package URL: `https://github.com/HanlunWang/DotPageIndicator.git`
+3. Click "Add Package"
 
 ## System Requirements
 
