@@ -8,18 +8,18 @@ internal struct DotView: View {
     /// Whether this dot should be empty/invisible
     let isEmpty: Bool
     
-    /// The center Y position of the container
-    let centerY: CGFloat
+    /// The center position of the container
+    let centerPosition: CGFloat
     
-    /// The current Y position of this dot
-    let currentY: CGFloat
+    /// The current position of this dot
+    let currentPosition: CGFloat
     
     /// Style configuration
     let style: DotPageIndicatorStyle
     
     /// The distance of this dot from the center position
     private var distanceFromCenter: CGFloat {
-        abs(centerY - (currentY + centerY))
+        abs(centerPosition - (currentPosition + centerPosition))
     }
     
     /// Whether this dot is currently selected (centered)
@@ -39,7 +39,10 @@ internal struct DotView: View {
             .frame(width: style.dotSize, height: style.dotSize)
             .scaleEffect(scaleEffect)
             .opacity(opacity)
-            .offset(y: currentY)
+            .offset(
+                x: style.orientation == .horizontal ? currentPosition : 0,
+                y: style.orientation == .vertical ? currentPosition : 0
+            )
     }
     
     /// The color of the dot based on its state

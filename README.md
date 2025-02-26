@@ -1,6 +1,6 @@
 # DotPageIndicator
 
-A beautiful and customizable vertical dot-based page indicator for SwiftUI that shows the current position within a collection of items. Perfect for page views, carousels, and onboarding flows.
+A customizable dot-based page indicator for SwiftUI that supports both vertical and horizontal orientations. Perfect for indicating the current position within a collection of items, such as pages in a carousel or sections in a scrollable view.
 
 ![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Swift](https://img.shields.io/badge/swift-5.5%2B-orange.svg)
@@ -8,28 +8,24 @@ A beautiful and customizable vertical dot-based page indicator for SwiftUI that 
 
 ## Features
 
-- Vertical dot-based page indicator
-- Smooth animations with spring physics
-- Highly customizable appearance
-- Easy integration with SwiftUI views
-- Support for multiple styling options
-- Adaptive dot scaling and opacity
+- Support for both vertical and horizontal orientations
+- Customizable dot appearance (size, spacing, colors)
+- Smooth animations with spring effects
+- Adaptive scaling and opacity for better visual feedback
+- Optional content state indication for each dot
+- Multiple built-in styles (default, minimal, dark)
+- Background customization with material effects
+- iOS 15+, macOS 12+, tvOS 14+, watchOS 7+ support
 
 ## Installation
 
 ### Swift Package Manager
 
-Add DotPageIndicator to your project through Xcode:
-
-1. Go to `File` > `Add Packages...`
-2. Enter the package URL: `https://github.com/wanghanlun/DotPageIndicator.git`
-3. Click `Add Package`
-
-Or add it to your `Package.swift` file:
+Add the following to your `Package.swift` file:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/wanghanlun/DotPageIndicator.git", from: "1.0.0")
+    .package(url: "https://github.com/yourusername/DotPageIndicator.git", from: "1.0.0")
 ]
 ```
 
@@ -43,52 +39,84 @@ dependencies: [
 
 ## Usage
 
-### Basic Implementation
+### Basic Usage
 
 ```swift
-import SwiftUI
-import DotPageIndicator
+@State private var currentPage = 0
+let totalPages = 5
 
-struct ContentView: View {
-    @State private var currentPage = 0
-    let totalPages = 5
+// Vertical indicator (default)
+DotPageIndicator(
+    currentIndex: $currentPage,
+    totalItems: totalPages
+)
+.frame(width: 50)  // Adjust width for vertical orientation
 
-    var body: some View {
-        HStack {
-            DotPageIndicator(
-                currentIndex: $currentPage,
-                totalItems: totalPages
-            )
-            .frame(width: 50)
-
-            // Your page content here
-        }
-    }
-}
+// Horizontal indicator
+DotPageIndicator(
+    currentIndex: $currentPage,
+    totalItems: totalPages,
+    style: .init(orientation: .horizontal)
+)
+.frame(height: 50)  // Adjust height for horizontal orientation
 ```
 
-### View Extension Usage
+### Custom Styling
 
 ```swift
-import SwiftUI
-import DotPageIndicator
+DotPageIndicator(
+    currentIndex: $currentPage,
+    totalItems: totalPages,
+    style: DotPageIndicatorStyle(
+        orientation: .horizontal,          // Choose orientation
+        dotSpacing: 12,                   // Space between dots
+        dotSize: 8,                       // Size of each dot
+        visibleDots: 5,                   // Number of visible dots
+        selectedDotColor: .blue,          // Color of the selected dot
+        activeDotColor: .gray,            // Color of active dots
+        inactiveDotColor: .gray.opacity(0.3), // Color of inactive dots
+        selectedDotScale: 1.4,            // Scale factor for selected dot
+        normalDotScale: 0.8               // Scale factor for other dots
+    )
+)
+```
 
-struct ContentView: View {
-    @State private var currentPage = 0
-    let totalPages = 5
+### Built-in Styles
 
-    var body: some View {
-        TabView(selection: $currentPage) {
-            // Your pages here
-        }
-        .tabViewStyle(.page)
-        .dotPageIndicator(
-            currentIndex: $currentPage,
-            totalItems: totalPages,
-            alignment: .trailing
-        )
+```swift
+// Default style
+DotPageIndicator(
+    currentIndex: $currentPage,
+    totalItems: totalPages,
+    style: .default
+)
+
+// Minimal style (transparent background)
+DotPageIndicator(
+    currentIndex: $currentPage,
+    totalItems: totalPages,
+    style: .minimal
+)
+
+// Dark style (white dots on dark background)
+DotPageIndicator(
+    currentIndex: $currentPage,
+    totalItems: totalPages,
+    style: .dark
+)
+```
+
+### Content State Indication
+
+```swift
+DotPageIndicator(
+    currentIndex: $currentPage,
+    totalItems: totalPages,
+    hasContent: { index in
+        // Return true if the item at this index has content
+        return true
     }
-}
+)
 ```
 
 ## Customization
@@ -145,21 +173,6 @@ DotPageIndicator(
     currentIndex: $currentPage,
     totalItems: totalPages,
     style: customStyle
-)
-```
-
-### Content Awareness
-
-You can specify which items have content using the `hasContent` parameter:
-
-```swift
-DotPageIndicator(
-    currentIndex: $currentPage,
-    totalItems: totalPages,
-    hasContent: { index in
-        // Return true if the item at this index has content
-        return true
-    }
 )
 ```
 

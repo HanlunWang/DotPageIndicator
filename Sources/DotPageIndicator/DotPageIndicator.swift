@@ -37,25 +37,30 @@ public struct DotPageIndicator: View {
     
     public var body: some View {
         GeometryReader { geometry in
-            let centerY = geometry.size.height / 2
+            let centerPosition = style.orientation == .vertical ? 
+                geometry.size.height / 2 : 
+                geometry.size.width / 2
+            
             ZStack {
                 ForEach(0..<totalItems, id: \.self) { index in
                     DotView(
                         hasContent: hasContent?(index) ?? true,
                         isEmpty: false,
-                        centerY: centerY,
-                        currentY: getDotPosition(for: index),
+                        centerPosition: centerPosition,
+                        currentPosition: getDotPosition(for: index),
                         style: style
                     )
                     .animation(.spring(response: style.animationResponse, 
-                                      dampingFraction: style.animationDampingFraction), 
-                              value: currentIndex)
+                                     dampingFraction: style.animationDampingFraction), 
+                             value: currentIndex)
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
-        .frame(width: style.indicatorWidth, 
-               height: CGFloat(style.visibleDots) * style.dotSpacing)
+        .frame(
+            width: style.orientation == .vertical ? style.indicatorWidth : (CGFloat(style.visibleDots) * style.dotSpacing),
+            height: style.orientation == .vertical ? (CGFloat(style.visibleDots) * style.dotSpacing) : style.indicatorWidth
+        )
         .clipped()
         .padding(.vertical, style.verticalPadding)
         .padding(.horizontal, style.horizontalPadding)
@@ -77,31 +82,47 @@ public struct DotPageIndicator: View {
         let totalItems = 10
         
         var body: some View {
-            HStack {
-                DotPageIndicator(
-                    currentIndex: $currentIndex,
-                    totalItems: totalItems
-                )
-                .frame(width: 50)
+            VStack {
+                // Vertical indicator
+                HStack {
+                    DotPageIndicator(
+                        currentIndex: $currentIndex,
+                        totalItems: totalItems,
+                        style: .init(orientation: .vertical)
+                    )
+                    .frame(width: 50)
+                    
+                    Spacer()
+                    
+                    VStack {
+                        Button("Previous") {
+                            if currentIndex > 0 {
+                                currentIndex -= 1
+                            }
+                        }
+                        
+                        Text("Page \(currentIndex + 1) of \(totalItems)")
+                        
+                        Button("Next") {
+                            if currentIndex < totalItems - 1 {
+                                currentIndex += 1
+                            }
+                        }
+                    }
+                    .padding()
+                }
                 
                 Spacer()
                 
+                // Horizontal indicator
                 VStack {
-                    Button("Previous") {
-                        if currentIndex > 0 {
-                            currentIndex -= 1
-                        }
-                    }
-                    
-                    Text("Page \(currentIndex + 1) of \(totalItems)")
-                    
-                    Button("Next") {
-                        if currentIndex < totalItems - 1 {
-                            currentIndex += 1
-                        }
-                    }
+                    DotPageIndicator(
+                        currentIndex: $currentIndex,
+                        totalItems: totalItems,
+                        style: .init(orientation: .horizontal)
+                    )
+                    .frame(height: 50)
                 }
-                .padding()
             }
             .padding()
         }

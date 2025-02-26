@@ -2,6 +2,15 @@ import SwiftUI
 
 /// Style configuration for the DotPageIndicator
 public struct DotPageIndicatorStyle {
+    /// Orientation of the dot page indicator
+    public enum Orientation {
+        case vertical
+        case horizontal
+    }
+    
+    /// The orientation of the indicator
+    public let orientation: Orientation
+    
     /// Spacing between dots
     public let dotSpacing: CGFloat
     
@@ -55,6 +64,7 @@ public struct DotPageIndicatorStyle {
     
     /// Creates a new style configuration
     public init(
+        orientation: Orientation = .vertical,
         dotSpacing: CGFloat = 12,
         dotSize: CGFloat = 6,
         visibleDots: Int = 7,
@@ -73,6 +83,7 @@ public struct DotPageIndicatorStyle {
         animationResponse: Double = 0.3,
         animationDampingFraction: Double = 0.8
     ) {
+        self.orientation = orientation
         self.dotSpacing = dotSpacing
         self.dotSize = dotSize
         self.visibleDots = visibleDots
